@@ -61,7 +61,7 @@ export default {
 
 .editor, .CodeMirror
 	flex 1
-	height "calc(100vh - %s)" % navbar-height
+	height full-height
 	pre
 		font-family Roboto Mono, monospace
 

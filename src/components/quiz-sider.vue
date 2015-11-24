@@ -35,7 +35,7 @@ export default {
 .quiz-sider-container
 	display flex
 	flex-direction column
-	height "calc(100vh - %s)" % navbar-height
+	height full-height
 	width quiz-sider-width-large
 	padding 8px 0 0 16px
 	border-right light-border

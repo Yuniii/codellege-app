@@ -50,7 +50,7 @@ export default {
 .logs-container
 	padding content-page-padding
 	overflow-y scroll
-	height "calc(100vh - %s)" % navbar-height
+	height full-height
 	.delete
 		color #C00
 	.log

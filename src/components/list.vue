@@ -1,8 +1,10 @@
 <template>
-	<h1>List</h1>
-	<ul>
-		<li v-for="q in qList"><a v-link="{ path: '/' + $route.params.groupId + '/' + q.id }">{{ q.title }}</a></li>
-	</ul>
+	<div class="list-container">
+		<h1>List</h1>
+		<ul>
+			<li v-for="q in qList"><a v-link="{ path: '/' + $route.params.groupId + '/' + q.id }">{{ q.title }}</a></li>
+		</ul>
+	</div>
 </template>
 
 <script>
@@ -25,3 +27,10 @@ export default {
 	}
 }
 </script>
+
+<style lang="stylus">
+@require './../styles/vars'
+
+.list-container
+	padding content-page-padding
+</style>

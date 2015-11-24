@@ -48,6 +48,9 @@ store.updateQ = function (qn, cb) {
 		setTimeout(() => {this.updateQ(qn, cb)}, 200);
 		return;
 	}
+	if (parseInt(qn) <= 0 || parseInt(qn) > this.getQuizCount()) {
+		return;
+	}
 	this.qn = parseInt(qn);
 	var data = this.quizData[parseInt(qn)-1];
 	cb(data);
@@ -58,6 +61,10 @@ store.updateQ = function (qn, cb) {
 
 store.onUpdateQ = function (cb) {
 	this.onUpdateQListener.push(cb);
+}
+
+store.getQuizCount = function () {
+	return this.quizData.length;
 }
 
 store.logs = [];

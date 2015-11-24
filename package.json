@@ -1,7 +1,7 @@
 {
   "name": "codellege",
   "version": "1.0.0",
-  "repository": "yuniii/codellege-web",
+  "repository": "yuniii/codellege-app",
   "scripts": {
     "dev": "webpack-dev-server --inline --hot --quiet",
     "build": "webpack --progress --hide-modules --optimize-minimize"

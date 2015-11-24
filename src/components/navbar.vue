@@ -10,15 +10,36 @@
 			</ul>
 			<div class="uk-navbar-flip">
 				<ul class="uk-navbar-nav">
-					<li><a v-link="{ path: '/' + $route.params.groupId + '/' + (parseInt($route.params.qn) - 1) }"><i class="uk-icon-arrow-left"></i> 上一題</a>
+					<li><a v-link="{ path: '/' + $route.params.groupId + '/' + (parseInt($route.params.qn) - 1) }" @click="checkPrev"><i class="uk-icon-arrow-left"></i> 上一題</a>
 					</li>
-					<li><a v-link="{ path: '/' + $route.params.groupId + '/' + (parseInt($route.params.qn) + 1) }">下一題 <i class="uk-icon-arrow-right"></i></a>
+					<li><a v-link="{ path: '/' + $route.params.groupId + '/' + (parseInt($route.params.qn) + 1) }" @click="checkNext">下一題 <i class="uk-icon-arrow-right"></i></a>
 					</li>
 				</ul>
 			</div>
 		</div>
 	</nav>
 </template>
+
+<script>
+import store from './../lib/store'
+
+export default {
+	methods: {
+		checkPrev() {
+			if (parseInt(this.$route.params.qn) === 1) {
+				alert('這已經是第一題了！');
+				this.$route.router.go('/' + this.$route.params.groupId + '/1');
+			}
+		},
+		checkNext() {
+			if (parseInt(this.$route.params.qn) === store.getQuizCount()) {
+				alert('這已經是最後一題了！');
+				this.$route.router.go('/' + this.$route.params.groupId + '/' + store.getQuizCount());
+			}
+		}
+	}
+}
+</script>
 
 <style lang="stylus">
 @require './../styles/vars'

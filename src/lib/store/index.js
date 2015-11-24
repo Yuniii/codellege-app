@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Resource from 'vue-resource'
 Vue.use(Resource);
 
+import { getNow } from './../util.js'
+
 const store = {};
 const api = 'https://codincat.cloudant.com/codellege/';
 export default store;
@@ -10,13 +12,14 @@ store.groupId = 0;
 store.qn = 0;
 store.quizData = null;
 store.onUpdateQListener = [];
+store.onResetCodeListener = null;
+store.userCode = [];
 
 store.setGroup = function (groupId) {
 	if (groupId === this.groupId) {
 		return;
 	}
 	this.groupId = groupId;
-	console.log(groupId);
 	this.loadQuizData(groupId);
 }
 
@@ -38,8 +41,12 @@ store.loadQuizData = function (groupId) {
 	});
 }
 
-store.getQuizData = function () {
-	return this.quizData;
+store.getQuizData = function (qn) {
+	if (typeof qn === 'undefined') {
+		return this.quizData;
+	} else {
+		return this.quizData[qn - 1];
+	}
 }
 
 store.updateQ = function (qn, cb) {
@@ -67,12 +74,34 @@ store.getQuizCount = function () {
 	return this.quizData.length;
 }
 
+store.setUserCode = function (qn, code) {
+	this.userCode[qn] = code;
+}
+
+store.onResetCode = function (fn) {
+	this.onResetCodeListener = fn;
+}
+
+store.resetCode = function (qn) {
+	var qData = this.getQuizData(qn);
+	if (typeof qData.part !== 'undefined') {
+		this.userCode[qn] = qData.part;
+	} else {
+		this.userCode[qn] = qData.ans;
+	}
+	this.onResetCodeListener(this.userCode[qn]);
+}
+
+store.getUserCode = function (qn) {
+	return this.userCode[qn];
+}
+
 store.logs = [];
 
-store.addLog = function (padname, code, data) {
+store.addLog = function (title, code, data) {
 	var log = {
 		'time': getNow(),
-		'padname': padname,
+		'title': title,
 		'code': code,
 		'data': data
 	};

@@ -21,9 +21,16 @@ export default {
 			matchBrackets: true,
 			lineNumbers: true,
 			indentUnit: 4,
-			viewportMargin: Infinity
+			viewportMargin: Infinity,
+			lineWrapping: true
+		});
+		this.codeMirror.on('changes',() => {
+			store.setUserCode(this.$route.params.qn, this.codeMirror.getValue());
 		});
 		store.setGroup(this.$route.params.groupId);
+		store.onResetCode((partCode) => {
+			this.codeMirror.setValue(partCode);
+		});
 		this.loadQuiz();
 		this.isInit = true;
 	},
@@ -42,7 +49,12 @@ export default {
 					console.log('沒題目了！');
 					return;
 				}
-				if (typeof data !== 'undefined' && typeof data.part !== 'undefined') {
+
+				var userCode = store.getUserCode(this.$route.params.qn);
+				if (typeof userCode !== 'undefined') {
+					this.codeMirror.setValue(userCode);
+				}
+				else if (typeof data.part !== 'undefined') {
 					this.codeMirror.setValue(data.part);
 				} else {
 					this.codeMirror.setValue(data.ans);

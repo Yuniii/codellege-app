@@ -33,4 +33,6 @@ export default {
 
 .list-container
 	padding content-page-padding
+	overflow auto
+	height full-height
 </style>

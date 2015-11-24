@@ -47,6 +47,8 @@ export default {
 	.description-container
 		overflow-y auto
 		border-bottom light-border
+	.description pre
+		background none
 	.stdout-container
 		flex-direction column
 	.stdout

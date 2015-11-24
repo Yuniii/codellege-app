@@ -5,7 +5,7 @@
 			<dl class="uk-description-list-horizontal">
 				<div class="uk-panel-badge"><a href="javascript:void(0)" class="uk-close uk-close-alt delete" @click="delete(log)"></a></div>
 				<dt>名稱</dt>
-				<dd>{{ log.padname }}</dd>
+				<dd>{{ log.title }}</dd>
 				<dt>時間</dt>
 				<dd>{{ log.time }}</dd>
 				<dt class="code-title">程式碼</dt>

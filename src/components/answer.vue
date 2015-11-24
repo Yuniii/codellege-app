@@ -23,6 +23,14 @@ export default {
 </script>
 
 <style lang="stylus">
+@require './../styles/vars'
+
 .refAnswer
+	height full-height
 	overflow auto
+	margin 0
+	box-sizing border-box
+	font-family 'Roboto Mono', '微軟正黑體'
+	font-size 14px
+	line-height 1.75
 </style>

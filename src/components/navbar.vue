@@ -2,11 +2,12 @@
 	<nav class="uk-navbar navbar">
 		<div class="navbar-nav uk-container-center">
 			<ul class="uk-navbar-nav">
-				<li><a href="javascript:void(0)">執行程式 <i class="uk-icon-play"></i></a></li>
+				<li class="run-btn"><a href="javascript:void(0)" @click="runCode">執行程式 <i class="uk-icon-play"></i></a></li>
 				<li><a v-link="{ path: '/' + $route.params.groupId + '/' + $route.params.qn, exact: true}">程式撰寫</a></li>
 				<li><a v-link="{ path: '/' + $route.params.groupId + '/' + $route.params.qn + '/answer' }">參考解答</a></li>
 				<li><a v-link="{ path: '/' + $route.params.groupId + '/' + $route.params.qn + '/list' }">題目清單</a></li>
 				<li><a v-link="{ path: '/' + $route.params.groupId + '/' + $route.params.qn + '/logs' }">編譯記錄</a></li>
+				<li><a href="javascript:void(0)" @click="reset">重設此題</a></li>
 			</ul>
 			<div class="uk-navbar-flip">
 				<ul class="uk-navbar-nav">
@@ -25,6 +26,27 @@ import store from './../lib/store'
 
 export default {
 	methods: {
+		runCode() {
+			var qn = this.$route.params.qn,
+				userCode = store.getUserCode(qn);
+
+			if (typeof userCode === 'undefined') {
+				return;
+			}
+			var code = { code:  userCode };
+
+			this.$http.post('http://52.32.208.197:8081', code, (data, status, req) => {
+				store.addLog(store.getQuizData(qn).title, userCode, data);
+				this.$route.router.go('/' + this.$route.params.groupId + '/' + qn + '/logs');
+			});
+		},
+
+		reset() {
+			UIkit.modal.confirm("確定要將此題清除重寫？", () => {
+				store.resetCode(this.$route.params.qn);
+			});
+		},
+
 		checkPrev() {
 			if (parseInt(this.$route.params.qn) === 1) {
 				alert('這已經是第一題了！');
@@ -52,6 +74,8 @@ export default {
 	box-shadow  0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 7px 0 rgba(0,0,0,.12)
 	position relative
 	z-index 300
+	.run-btn
+		margin-right 22px
 	li a
 		color #FFF
 		font-family $font-family

@@ -1,0 +1,54 @@
+<template>
+	<nav class="uk-navbar navbar">
+		<div class="navbar-nav uk-container-center">
+			<ul class="uk-navbar-nav">
+				<li><a href="javascript:void(0)">執行程式 <i class="uk-icon-play"></i></a></li>
+				<li><a v-link="{ path: '/' + $route.params.groupId + '/' + $route.params.qn, exact: true}">程式撰寫</a></li>
+				<li><a v-link="{ path: '/' + $route.params.groupId + '/' + $route.params.qn + '/answer' }">參考解答</a></li>
+				<li><a v-link="{ path: '/' + $route.params.groupId + '/' + $route.params.qn + '/list' }">題目清單</a></li>
+				<li><a v-link="{ path: '/' + $route.params.groupId + '/' + $route.params.qn + '/logs' }">編譯記錄</a></li>
+			</ul>
+			<div class="uk-navbar-flip">
+				<ul class="uk-navbar-nav">
+					<li><a v-link="{ path: '/' + $route.params.groupId + '/' + (parseInt($route.params.qn) - 1) }"><i class="uk-icon-arrow-left"></i> 上一題</a>
+					</li>
+					<li><a v-link="{ path: '/' + $route.params.groupId + '/' + (parseInt($route.params.qn) + 1) }">下一題 <i class="uk-icon-arrow-right"></i></a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+</template>
+
+<style lang="stylus">
+@require './../styles/vars'
+@require './../styles/functions'
+
+.navbar
+	background main-color
+	color #FFF
+	height navbar-height
+	box-shadow  0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 7px 0 rgba(0,0,0,.12)
+	position relative
+	z-index 300
+	li a
+		color #FFF
+		font-family $font-family
+		font-size 16px
+		height navbar-height
+		line-height navbar-height
+		&:hover, &:focus, &:active
+			background whiteA(.10)
+			color #FFF
+		i
+			font-size 14px
+	li a.v-link-active
+		background whiteA(.20)
+	li.uk-open a
+		&:hover, &:focus, &:active
+			color #444
+			background #f5f5f5
+
+.navbar-nav
+	width navbar-width
+</style>

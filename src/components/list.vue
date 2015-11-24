@@ -1,0 +1,27 @@
+<template>
+	<h1>List</h1>
+	<ul>
+		<li v-for="q in qList"><a v-link="{ path: '/' + $route.params.groupId + '/' + q.id }">{{ q.title }}</a></li>
+	</ul>
+</template>
+
+<script>
+import store from './../lib/store'
+
+export default {
+	data() {
+		return {
+			qList: []
+		}
+	},
+
+	route:{
+		data() {
+			// make sure quizData is initiated
+			store.updateQ(this.$route.params.qn, (data) => {
+				this.qList = store.getQuizData();
+			});
+		}
+	}
+}
+</script>

@@ -1,0 +1,29 @@
+{
+  "name": "codellege",
+  "version": "1.0.0",
+  "repository": "yuniii/codellege-web",
+  "scripts": {
+    "dev": "webpack-dev-server --inline --hot --quiet",
+    "build": "webpack --progress --hide-modules --optimize-minimize"
+  },
+  "dependencies": {
+    "vue": "^1.0.8",
+    "vue-resource": "^0.1.17",
+    "vue-router": "^0.7.5"
+  },
+  "devDependencies": {
+    "babel-core": "^6.1.0",
+    "babel-loader": "^6.1.0",
+    "babel-runtime": "^6.1.0",
+    "babel-preset-es2015": "^6.1.18",
+    "babel-plugin-transform-runtime": "^6.1.18",
+    "css-loader": "latest",
+    "stylus-loader": "latest",
+    "style-loader": "latest",
+    "vue-hot-reload-api": "^1.2.0",
+    "vue-html-loader": "^1.0.0",
+    "vue-loader": "^7.0.0",
+    "webpack": "^1.12.2",
+    "webpack-dev-server": "^1.12.0"
+  }
+}

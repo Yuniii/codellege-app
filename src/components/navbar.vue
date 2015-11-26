@@ -5,14 +5,18 @@
 				<li class="run-btn"><a href="javascript:void(0)" @click="runCode">執行程式 <i class="uk-icon-play"></i></a></li>
 				<li><a v-link="{ path: '/' + $route.params.groupId + '/' + $route.params.qn, exact: true}">程式撰寫</a></li>
 				<li><a v-link="{ path: '/' + $route.params.groupId + '/' + $route.params.qn + '/answer' }">參考解答</a></li>
-				<li><a v-link="{ path: '/' + $route.params.groupId + '/' + $route.params.qn + '/list' }">題目清單</a></li>
 				<li><a v-link="{ path: '/' + $route.params.groupId + '/' + $route.params.qn + '/logs' }">編譯記錄</a></li>
 				<li><a href="javascript:void(0)" @click="reset">重設此題</a></li>
+				<li class="uk-parent" data-uk-dropdown="{mode:'click'}">
+					<a href="javascript:void(0)">Input資料 <i class="uk-icon-caret-down"></i></a>
+					<stdin></stdin>
+				</li>
 			</ul>
 			<div class="uk-navbar-flip">
 				<ul class="uk-navbar-nav">
 					<li><a v-link="{ path: '/' + $route.params.groupId + '/' + (parseInt($route.params.qn) - 1) }" @click="checkPrev"><i class="uk-icon-arrow-left"></i> 上一題</a>
 					</li>
+					<li><a v-link="{ path: '/' + $route.params.groupId + '/' + $route.params.qn + '/list' }">題目清單</a></li>
 					<li><a v-link="{ path: '/' + $route.params.groupId + '/' + (parseInt($route.params.qn) + 1) }" @click="checkNext">下一題 <i class="uk-icon-arrow-right"></i></a>
 					</li>
 				</ul>
@@ -23,20 +27,25 @@
 
 <script>
 import store from './../lib/store'
+import Stdin from './stdin.vue'
 
 export default {
 	methods: {
 		runCode() {
 			var qn = this.$route.params.qn,
-				userCode = store.getUserCode(qn);
+				userCode = store.getUserCode(qn),
+				stdin = store.getStdin(qn);
 
 			if (typeof userCode === 'undefined') {
 				return;
 			}
-			var code = { code:  userCode };
+			var code = {
+				code:  userCode,
+				input: stdin
+			};
 
 			this.$http.post('http://52.32.208.197:8081', code, (data, status, req) => {
-				store.addLog(store.getQuizData(qn).title, userCode, data);
+				store.addLog(store.getQuizData(qn).title, userCode, stdin, data);
 				this.$route.router.go('/' + this.$route.params.groupId + '/' + qn + '/logs');
 			});
 		},
@@ -59,6 +68,10 @@ export default {
 				this.$route.router.go('/' + this.$route.params.groupId + '/' + store.getQuizCount());
 			}
 		}
+	},
+
+	components: {
+		Stdin
 	}
 }
 </script>

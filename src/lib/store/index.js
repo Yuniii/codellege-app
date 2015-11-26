@@ -14,6 +14,7 @@ store.quizData = null;
 store.onUpdateQListener = [];
 store.onResetCodeListener = null;
 store.userCode = [];
+store.stdin = [];
 
 store.setGroup = function (groupId) {
 	if (groupId === this.groupId) {
@@ -96,13 +97,22 @@ store.getUserCode = function (qn) {
 	return this.userCode[qn];
 }
 
+store.setStdin = function (qn, val) {
+	this.stdin[qn] = val;
+}
+
+store.getStdin = function (qn) {
+	return this.stdin[qn] || '';
+}
+
 store.logs = [];
 
-store.addLog = function (title, code, data) {
+store.addLog = function (title, code, stdin, data) {
 	var log = {
 		'time': getNow(),
 		'title': title,
 		'code': code,
+		'stdin': stdin,
 		'data': data
 	};
 	this.logs.push(log);

@@ -10,6 +10,8 @@
 				<dd>{{ log.time }}</dd>
 				<dt class="code-title">程式碼</dt>
 				<dd><a href="javascript:void(0)" @click="showCode($index, $event)">點擊展開程式碼</a><pre class="code-content" id="code-content-{{ $index }}">{{ log.code }}</pre></dd>
+				<dt>Input 資料</dt>
+				<dd>{{ log.stdin | checkEmpty }}</dd>
 				<dt>編譯訊息</dt>
 				<dd><pre>{{ log.data }}</pre></dd>
 			</dl>
@@ -24,6 +26,13 @@ export default {
 	data() {
 		return {
 			logs: []
+		}
+	},
+
+	filters: {
+		checkEmpty(str) {
+			console.log(str);
+			return str || '無輸入資料';
 		}
 	},
 

@@ -28,6 +28,7 @@
 <script>
 import store from './../lib/store'
 import Stdin from './stdin.vue'
+import { checkAnswer } from './../lib/util.js'
 
 export default {
 	methods: {
@@ -45,7 +46,7 @@ export default {
 			};
 
 			this.$http.post('http://52.32.208.197:8081', code, (data, status, req) => {
-				store.addLog(store.getQuizData(qn).title, userCode, stdin, data);
+				store.addLog(store.getQuizData(qn).title, userCode, stdin, data, checkAnswer(data, store.getQuizData(qn).stdout));
 				this.$route.router.go('/' + this.$route.params.groupId + '/' + qn + '/logs');
 			});
 		},

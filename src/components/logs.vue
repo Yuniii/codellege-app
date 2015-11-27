@@ -1,7 +1,7 @@
 <template>
 	<div class="logs-container">
 		<h1 id="my-ida">編譯記錄</h1>
-		<div v-for="log in logs" class="uk-panel uk-panel-box log">
+		<div v-for="log in logs | orderBy 'time' -1" class="uk-panel uk-panel-box log">
 			<dl class="uk-description-list-horizontal">
 				<div class="uk-panel-badge"><a href="javascript:void(0)" class="uk-close uk-close-alt delete" @click="delete(log)"></a></div>
 				<dt>名稱</dt>
@@ -14,6 +14,8 @@
 				<dd>{{ log.stdin | checkEmpty }}</dd>
 				<dt>編譯訊息</dt>
 				<dd><pre>{{ log.data }}</pre></dd>
+				<dt>測驗結果</dt>
+				<dd><pre>{{{ log.passed | passed }}}</pre></dd>
 			</dl>
 		</div>
 	</div>
@@ -31,8 +33,12 @@ export default {
 
 	filters: {
 		checkEmpty(str) {
-			console.log(str);
 			return str || '無輸入資料';
+		},
+		passed(bool) {
+			if (bool)
+				return '<div class="uk-alert uk-alert-success">通過測試！</div>';
+			return '<div class="uk-alert uk-alert-danger">答案錯誤！</div>';
 		}
 	},
 
@@ -74,4 +80,6 @@ export default {
 	.code-content
 		margin-top 0
 		display none
+	.uk-alert
+		border 1px solid
 </style>

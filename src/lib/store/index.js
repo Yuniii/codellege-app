@@ -107,13 +107,14 @@ store.getStdin = function (qn) {
 
 store.logs = [];
 
-store.addLog = function (title, code, stdin, data) {
+store.addLog = function (title, code, stdin, data, passed) {
 	var log = {
 		'time': getNow(),
 		'title': title,
 		'code': code,
 		'stdin': stdin,
-		'data': data
+		'data': data,
+		'passed': passed
 	};
 	this.logs.push(log);
 }

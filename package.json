@@ -19,6 +19,7 @@
     "babel-plugin-transform-runtime": "^6.1.18",
     "css-loader": "latest",
     "stylus-loader": "latest",
+    "stylus": "latest",
     "style-loader": "latest",
     "vue-hot-reload-api": "^1.2.0",
     "vue-html-loader": "^1.0.0",

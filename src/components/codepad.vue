@@ -27,7 +27,7 @@ export default {
 		this.codeMirror.on('changes',() => {
 			store.setUserCode(this.$route.params.qn, this.codeMirror.getValue());
 		});
-		store.setGroup(this.$route.params.groupId);
+		store.setCourseId(this.$route.params.courseId);
 		store.onResetCode((partCode) => {
 			this.codeMirror.setValue(partCode);
 		});

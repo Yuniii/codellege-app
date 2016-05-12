@@ -15,7 +15,7 @@ import store from './lib/store'
 
 export default {
 	created() {
-		store.setGroup(this.$route.params.groupId);
+		store.setCourseId(this.$route.params.courseId);
 	},
 
 	components: {

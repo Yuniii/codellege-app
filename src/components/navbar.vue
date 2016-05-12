@@ -3,9 +3,9 @@
 		<div class="navbar-nav uk-container-center">
 			<ul class="uk-navbar-nav">
 				<li class="run-btn"><a href="javascript:void(0)" @click="runCode">執行程式 <i class="uk-icon-play"></i></a></li>
-				<li><a v-link="{ path: '/' + $route.params.groupId + '/' + $route.params.qn, exact: true}">程式撰寫</a></li>
-				<li><a v-link="{ path: '/' + $route.params.groupId + '/' + $route.params.qn + '/answer' }">參考解答</a></li>
-				<li><a v-link="{ path: '/' + $route.params.groupId + '/' + $route.params.qn + '/logs' }">編譯記錄</a></li>
+				<li><a v-link="{ path: '/' + $route.params.courseId + '/' + $route.params.qn, exact: true}">程式撰寫</a></li>
+				<li><a v-link="{ path: '/' + $route.params.courseId + '/' + $route.params.qn + '/answer' }">參考解答</a></li>
+				<li><a v-link="{ path: '/' + $route.params.courseId + '/' + $route.params.qn + '/logs' }">編譯記錄</a></li>
 				<li><a href="javascript:void(0)" @click="reset">重設此題</a></li>
 				<li class="uk-parent" data-uk-dropdown="{mode:'click'}">
 					<a href="javascript:void(0)">Input資料 <i class="uk-icon-caret-down"></i></a>
@@ -14,10 +14,10 @@
 			</ul>
 			<div class="uk-navbar-flip">
 				<ul class="uk-navbar-nav">
-					<li><a v-link="{ path: '/' + $route.params.groupId + '/' + (parseInt($route.params.qn) - 1) }" @click="checkPrev"><i class="uk-icon-arrow-left"></i> 上一題</a>
+					<li><a href="javascript:void(0)" @click="checkPrev"><i class="uk-icon-arrow-left"></i> 上一題</a>
 					</li>
-					<li><a v-link="{ path: '/' + $route.params.groupId + '/' + $route.params.qn + '/list' }">題目清單</a></li>
-					<li><a v-link="{ path: '/' + $route.params.groupId + '/' + (parseInt($route.params.qn) + 1) }" @click="checkNext">下一題 <i class="uk-icon-arrow-right"></i></a>
+					<li><a v-link="{ path: '/' + $route.params.courseId + '/' + $route.params.qn + '/list' }">題目清單</a></li>
+					<li><a href="javascript:void(0)" @click="checkNext">下一題 <i class="uk-icon-arrow-right"></i></a>
 					</li>
 				</ul>
 			</div>
@@ -47,7 +47,7 @@ export default {
 
 			this.$http.post('http://52.32.208.197:8081', code, (data, status, req) => {
 				store.addLog(store.getQuizData(qn).title, userCode, stdin, data, checkAnswer(data, store.getQuizData(qn).stdout));
-				this.$route.router.go('/' + this.$route.params.groupId + '/' + qn + '/logs');
+				this.$route.router.go('/' + this.$route.params.courseId + '/' + qn + '/logs');
 			});
 		},
 
@@ -60,14 +60,24 @@ export default {
 		checkPrev() {
 			if (parseInt(this.$route.params.qn) === 1) {
 				alert('這已經是第一題了！');
-				this.$route.router.go('/' + this.$route.params.groupId + '/1');
+				this.$route.router.go('/' + this.$route.params.courseId + '/1');
+				return false;
 			}
+			let courseId = this.$route.params.courseId,
+				qn = parseInt(this.$route.params.qn) - 1;
+
+			this.$route.router.go(`/${courseId}/${qn}`);
 		},
 		checkNext() {
 			if (parseInt(this.$route.params.qn) === store.getQuizCount()) {
 				alert('這已經是最後一題了！');
-				this.$route.router.go('/' + this.$route.params.groupId + '/' + store.getQuizCount());
+				this.$route.router.go('/' + this.$route.params.courseId + '/' + store.getQuizCount());
+				return false;
 			}
+			let courseId = this.$route.params.courseId,
+				qn = parseInt(this.$route.params.qn) + 1;
+
+			this.$route.router.go(`/${courseId}/${qn}`);
 		}
 	},
 

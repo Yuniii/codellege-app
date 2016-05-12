@@ -5,10 +5,11 @@ Vue.use(Resource);
 import { getNow } from './../util.js'
 
 const store = {};
-const api = 'https://codincat.cloudant.com/codellege/';
+const api = 'http://localhost:8888/course';
 export default store;
 
-store.groupId = 0;
+store.courseId = 0;
+store.lessonId = 0;
 store.qn = 0;
 store.quizData = null;
 store.onUpdateQListener = [];
@@ -16,29 +17,30 @@ store.onResetCodeListener = null;
 store.userCode = [];
 store.stdin = [];
 
-store.setGroup = function (groupId) {
-	if (groupId === this.groupId) {
+store.setCourseId = function (courseId) {
+	if (courseId === this.courseId) {
 		return;
 	}
-	this.groupId = groupId;
-	this.loadQuizData(groupId);
+	[this.courseId, this.lessonId] = courseId.split('-');
+	this.loadQuizData(courseId);
 }
 
-store.loadQuizData = function (groupId) {
-	var localCache = sessionStorage.getItem(groupId);
+store.loadQuizData = function (courseId) {
+	var localCache = sessionStorage.getItem(courseId);
 	if (localCache !== null) {
 		this.quizData = JSON.parse(localCache);
 		return;
 	}
-	var queryObj = {
-		"selector": { "id": parseInt(groupId) }
-	};
 
-	Vue.http.post(api + '_find', JSON.stringify(queryObj), (data, status, req) => {
-		if (data.docs.length !== 0) {
-			this.quizData = data.docs[0].content;
-			sessionStorage.setItem(groupId, JSON.stringify(this.quizData));
+	Vue.http.get(`${api}/${this.courseId}/${this.lessonId}`).then((response) => {
+		var quizData;
+		try {
+			quizData = response.data;
+		} catch (e) {
+			alert('無法載入指定課程');
 		}
+		this.quizData = quizData;
+		sessionStorage.setItem(courseId, JSON.stringify(response.data));
 	});
 }
 

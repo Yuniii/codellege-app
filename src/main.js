@@ -16,7 +16,7 @@ Vue.use(Resource);
 var router = new Router();
 
 router.map({
-	'/:groupId': {
+	'/:courseId': {
 		component: App,
 		subRoutes: {
 			'/:qn': {
@@ -36,8 +36,8 @@ router.map({
 });
 
 router.redirect({
-	'/': '/1/1',
-	'/:groupId': '/:groupId/1'
+	'/': '/1-1/1',
+	'/:courseId': '/:courseId/1'
 });
 
 router.start(Main, '#app');

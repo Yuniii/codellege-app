@@ -30,6 +30,8 @@ import store from './../lib/store'
 import Stdin from './stdin.vue'
 import { checkAnswer } from './../lib/util.js'
 
+const COMPILE_SERVER = 'http://140.125.90.231:8889/compile';
+
 export default {
 	methods: {
 		runCode() {
@@ -40,13 +42,14 @@ export default {
 			if (typeof userCode === 'undefined') {
 				return;
 			}
-			var code = {
+			var codeData = {
 				code:  userCode,
-				input: stdin
+				stdin: stdin,
+				language: 8
 			};
 
-			this.$http.post('http://52.32.208.197:8081', code, (data, status, req) => {
-				store.addLog(store.getQuizData(qn).title, userCode, stdin, data, checkAnswer(data, store.getQuizData(qn).stdout));
+			this.$http.post(COMPILE_SERVER, codeData, (data, status, req) => {
+				store.addLog(store.getQuizData(qn).title, userCode, stdin, data.output + data.errors, checkAnswer(data, store.getQuizData(qn).stdout));
 				this.$route.router.go('/' + this.$route.params.courseId + '/' + qn + '/logs');
 			});
 		},

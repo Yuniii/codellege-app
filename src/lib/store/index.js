@@ -5,7 +5,8 @@ Vue.use(Resource);
 import { getNow } from './../util.js'
 
 const store = {};
-const api = 'http://localhost:8888/course';
+//const api = 'http://localhost:8888/course';
+const api = 'http://140.125.90.231:8888/course';
 export default store;
 
 store.courseId = 0;

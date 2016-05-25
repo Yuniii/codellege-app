@@ -11,7 +11,7 @@ export function getNow() {
 }
 
 export function checkAnswer(user, std) {
-	if (user === std || user === std + '\n')
+	if (user === std || user.trim() === std.trim())
 		return true;
 	return false;
 }

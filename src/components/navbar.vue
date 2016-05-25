@@ -49,7 +49,7 @@ export default {
 			};
 
 			this.$http.post(COMPILE_SERVER, codeData, (data, status, req) => {
-				store.addLog(store.getQuizData(qn).title, userCode, stdin, data.output + data.errors, checkAnswer(data, store.getQuizData(qn).stdout));
+				store.addLog(store.getQuizData(qn).title, userCode, stdin, data.output + data.errors, checkAnswer(data.output, store.getQuizData(qn).stdout));
 				this.$route.router.go('/' + this.$route.params.courseId + '/' + qn + '/logs');
 			});
 		},

@@ -4,7 +4,6 @@
 			<ul class="uk-navbar-nav">
 				<li class="run-btn"><a href="javascript:void(0)" @click="runCode">執行程式 <i class="uk-icon-play"></i></a></li>
 				<li><a v-link="{ path: '/' + $route.params.courseId + '/' + $route.params.qn, exact: true}">程式撰寫</a></li>
-				<li><a v-link="{ path: '/' + $route.params.courseId + '/' + $route.params.qn + '/answer' }">參考解答</a></li>
 				<li><a v-link="{ path: '/' + $route.params.courseId + '/' + $route.params.qn + '/logs' }">編譯記錄</a></li>
 				<li><a href="javascript:void(0)" @click="reset">重設此題</a></li>
 				<li class="uk-parent" data-uk-dropdown="{mode:'click'}">

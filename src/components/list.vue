@@ -2,7 +2,7 @@
 	<div class="list-container">
 		<h1>List</h1>
 		<ul>
-			<li v-for="q in qList"><a v-link="{ path: '/' + $route.params.courseId + '/' + q.id }">{{ q.title }}</a></li>
+			<li v-for="q in qList"><a v-link="{ path: '/' + $route.params.courseId + '/' + q.seq }">{{ q.title }}</a></li>
 		</ul>
 	</div>
 </template>

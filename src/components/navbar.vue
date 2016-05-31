@@ -105,7 +105,6 @@ export default {
 		margin-right 22px
 	li a
 		color #FFF
-		font-family $font-family
 		font-size 16px
 		height navbar-height
 		line-height navbar-height

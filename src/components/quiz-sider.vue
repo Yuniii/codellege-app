@@ -37,16 +37,16 @@ export default {
 	flex-direction column
 	height full-height
 	width quiz-sider-width-large
-	padding 8px 0 0 16px
 	border-right light-border
 	@media screen and (max-width: 1600px)
 		width quiz-sider-width-medium
 	> div
 		flex 1
-		justify-content center	
+		justify-content center
 	.description-container
 		overflow-y auto
 		border-bottom light-border
+		padding 8px 0 0 16px
 	.description pre
 		background none
 	.stdout-container
@@ -55,4 +55,7 @@ export default {
 		overflow auto
 		flex 1
 		margin-top 0
+		font-size 14px
+
+
 </style>

@@ -2,13 +2,23 @@
 	<nav class="uk-navbar navbar">
 		<div class="navbar-nav uk-container-center">
 			<ul class="uk-navbar-nav">
-				<li class="run-btn"><a href="javascript:void(0)" @click="runCode">執行程式 <i class="uk-icon-play"></i></a></li>
+				<li class="run-btn"><a href="javascript:void(0)" @click="runCode">執行 <i class="uk-icon-play"></i></a></li>
 				<li><a v-link="{ path: '/' + $route.params.courseId + '/' + $route.params.qn, exact: true}">程式撰寫</a></li>
 				<li><a v-link="{ path: '/' + $route.params.courseId + '/' + $route.params.qn + '/logs' }">編譯記錄</a></li>
 				<li><a href="javascript:void(0)" @click="reset">重設此題</a></li>
 				<li class="uk-parent" data-uk-dropdown="{mode:'click'}">
-					<a href="javascript:void(0)">Input資料 <i class="uk-icon-caret-down"></i></a>
+					<a href="javascript:void(0)">Input <i class="uk-icon-caret-down"></i></a>
 					<stdin></stdin>
+				</li>
+				<li class="uk-parent" data-uk-dropdown="{mode:'click'}">
+					<a href="javascript:void(0)">{{ lang[currentLang] }} <i class="uk-icon-caret-down"></i></a>
+					<div class="uk-dropdown uk-dropdown-navbar language-dropdown">
+						<ul class="uk-nav uk-nav-navbar">
+							<li v-for="l in lang">
+								<a href="javascript:void(0)" @click="setLang($index)">{{ l }}</a>
+							</li>
+						</ul>
+					</div>
 				</li>
 			</ul>
 			<div class="uk-navbar-flip">
@@ -32,11 +42,32 @@ import { checkAnswer } from './../lib/util.js'
 const COMPILE_SERVER = 'http://140.125.90.231:8889/compile';
 
 export default {
+	data() {
+		return {
+			lang: [
+				"Python",
+				"Ruby",
+				"Clojure",
+				"PHP",
+				"JavaScript",
+				"Scala",
+				"Go",
+				"C/C++",
+				"Java",
+				"VB.NET",
+				"C#",
+				"Bash",
+				"Objective-C"
+			],
+			currentLang: 8
+		}
+	},
 	methods: {
 		runCode() {
 			var qn = this.$route.params.qn,
 				userCode = store.getUserCode(qn),
-				stdin = store.getStdin(qn);
+				stdin = store.getStdin(qn),
+				lang = this.currentLang;
 
 			if (typeof userCode === 'undefined') {
 				return;
@@ -44,7 +75,7 @@ export default {
 			var codeData = {
 				code:  userCode,
 				stdin: stdin,
-				language: 8
+				language: lang
 			};
 
 			this.$http.post(COMPILE_SERVER, codeData, (data, status, req) => {
@@ -80,6 +111,10 @@ export default {
 				qn = parseInt(this.$route.params.qn) + 1;
 
 			this.$route.router.go(`/${courseId}/${qn}`);
+		},
+
+		setLang(index) {
+			this.currentLang = index
 		}
 	},
 
@@ -118,6 +153,15 @@ export default {
 		&:hover, &:focus, &:active
 			color #444
 			background #f5f5f5
+			
+	.language-dropdown
+		box-shadow 0 2px 2px 0 rgba(0,0,0,.16),0 3px 1px -2px rgba(0,0,0,.2),0 2px 6px 0 rgba(0,0,0,.12),0 0 3px rgba(0,0,0,.4)
+		a
+			color #444
+			line-height 20px
+			height @line-height
+			&:hover, &:focus, &:active
+				background #E5E5E5!important
 
 .navbar-nav
 	width navbar-width

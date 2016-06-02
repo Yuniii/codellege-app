@@ -79,9 +79,19 @@ export default {
 			};
 
 			this.$http.post(COMPILE_SERVER, codeData, (data, status, req) => {
-				store.addLog(store.getQuizData(qn).title, userCode, stdin, data.output + data.errors, checkAnswer(data.output, store.getQuizData(qn).stdout));
+				var result = checkAnswer(data.output, store.getQuizData(qn).stdout);
+				store.addLog(store.getQuizData(qn).title, userCode, stdin, data.output + data.errors, result);
+				
+				if (result && store.getUser !== 0) {
+					this.submit();
+				}
+
 				this.$route.router.go('/' + this.$route.params.courseId + '/' + qn + '/logs');
 			});
+		},
+
+		submit() {
+			console.log('submit');
 		},
 
 		reset() {
@@ -142,11 +152,15 @@ export default {
 		font-size 16px
 		height navbar-height
 		line-height navbar-height
+		@media screen and (max-width: 1100px)
+			font-size 14px
 		&:hover, &:focus, &:active
 			background whiteA(.10)
 			color #FFF
 		i
 			font-size 14px
+			@media screen and (max-width: 1100px)
+				font-size 12px
 	li a.v-link-active
 		background whiteA(.20)
 	li.uk-open a
@@ -165,4 +179,6 @@ export default {
 
 .navbar-nav
 	width navbar-width
+	@media screen and (max-width: 1100px)
+		width 100vw
 </style>

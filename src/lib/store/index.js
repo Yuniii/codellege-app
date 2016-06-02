@@ -12,6 +12,7 @@ export default store;
 store.courseId = 0;
 store.lessonId = 0;
 store.qn = 0;
+store.uid = 0;
 store.quizData = null;
 store.onUpdateQListener = [];
 store.onResetCodeListener = null;
@@ -24,6 +25,14 @@ store.setCourseId = function (courseId) {
 	}
 	[this.courseId, this.lessonId] = courseId.split('-');
 	this.loadQuizData(courseId);
+}
+
+store.setUser = function (uid) {
+	this.uid = uid;
+}
+
+store.getUser = function () {
+	return this.uid;
 }
 
 store.loadQuizData = function (courseId) {

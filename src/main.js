@@ -9,7 +9,6 @@ import Answer from './components/answer.vue'
 import List from './components/list.vue'
 import Logs from './components/logs.vue'
 
-Vue.config.debug = true;
 Vue.use(Router);
 Vue.use(Resource);
 

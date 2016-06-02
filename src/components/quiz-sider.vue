@@ -40,6 +40,8 @@ export default {
 	border-right light-border
 	@media screen and (max-width: 1600px)
 		width quiz-sider-width-medium
+	@media screen and (max-width: 1100px)
+		width quiz-sider-width-small
 	> div
 		flex 1
 		justify-content center

@@ -12,10 +12,13 @@
 import Navbar from './components/navbar.vue'
 import QuizSider from './components/quiz-sider.vue'
 import store from './lib/store'
+import { getParameter } from './lib/util.js'
 
 export default {
 	created() {
 		store.setCourseId(this.$route.params.courseId);
+		store.setUser(getParameter('uid'));
+		console.log(`userid: ${store.getUser()}`);
 	},
 
 	components: {

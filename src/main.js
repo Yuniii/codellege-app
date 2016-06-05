@@ -12,6 +12,11 @@ import Logs from './components/logs.vue'
 Vue.use(Router);
 Vue.use(Resource);
 
+Vue.http.options.headers = {
+	'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+};
+Vue.http.options.emulateJSON = true;
+
 var router = new Router();
 
 router.map({

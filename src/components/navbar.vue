@@ -42,6 +42,7 @@ import { checkAnswer } from './../lib/util.js'
 
 const COMPILE_SERVER = 'http://140.125.90.231:8889/compile';
 const SUBMIT_SERVER = 'http://140.125.90.231:8888/submit'
+//const SUBMIT_SERVER = 'http://localhost:8888/submit'
 
 export default {
 	data() {
@@ -109,13 +110,15 @@ export default {
 				uid: store.getUser()
 			};
 
-			this.$http.post(`${SUBMIT_SERVER}/${classId}/${courseId}/${lessonId}/${qn}`, submitData).then((data, status, req) => {
-				if (data === 'ok') {
-					UIkit.notify('練習結果已成功儲存！', {status: 'success'});
-				} else {
-					UIkit.notify('練習結果儲存失敗！', {status: 'danger'});
-				}
-			});
+			try {
+				this.$http.post(`${SUBMIT_SERVER}/${classId}/${courseId}/${lessonId}/${qn}`, submitData).then((response) => {
+					if (response.data === 'ok') {
+						UIkit.notify('練習結果已成功儲存！', {status: 'success'});
+					} else {
+						UIkit.notify('練習結果儲存失敗！', {status: 'danger'})
+					}
+				});
+			} catch (e) {UIkit.notify('與伺服器連線失敗，練習結果無法儲存！', {status: 'danger'})}
 		},
 
 		reset() {
@@ -205,4 +208,7 @@ export default {
 	width navbar-width
 	@media screen and (max-width: 1100px)
 		width 100vw
+
+.uk-notify-message
+	box-shadow 1px 2px 16px #888
 </style>

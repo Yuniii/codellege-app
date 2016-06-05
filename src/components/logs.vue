@@ -3,7 +3,7 @@
 		<h1 id="my-ida">編譯記錄</h1>
 		<div v-for="log in logs | orderBy 'time' -1" class="uk-panel uk-panel-box log">
 			<dl class="uk-description-list-horizontal">
-				<div class="uk-panel-badge"><a href="javascript:void(0)" class="uk-close uk-close-alt delete" @click="delete(log)"></a></div>
+				<div class="uk-panel-badge"><a href="javascript:void(0)" class="uk-close uk-close-alt delete" @click="deleteLog(log)"></a></div>
 				<dt>名稱</dt>
 				<dd>{{ log.title }}</dd>
 				<dt>時間</dt>
@@ -36,8 +36,7 @@ export default {
 			return str || '無輸入資料';
 		},
 		passed(bool) {
-			if (bool)
-				return '<div class="uk-alert uk-alert-success">通過測試！</div>';
+			if (bool) return '<div class="uk-alert uk-alert-success">通過測試！</div>';
 			return '<div class="uk-alert uk-alert-danger">答案錯誤！</div>';
 		}
 	},
@@ -52,7 +51,7 @@ export default {
 			document.getElementById('code-content-' + i).style.display = 'block';
 		},
 
-		delete(log) {
+		deleteLog(log) {
 			this.logs.$remove(log);
 		}
 	}
@@ -72,7 +71,6 @@ export default {
 		margin-bottom 16px
 		box-shadow 0 2px 2px 0 rgba(0,0,0,.12),0 2px 1px -2px rgba(0,0,0,.14),1px 2px 4px 0 rgba(0,0,0,.12)
 	pre
-		font-family 'Roboto Mono', '微軟正黑體'
 		font-size 15px
 		line-height 1.8
 		padding 0

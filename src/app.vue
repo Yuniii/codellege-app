@@ -17,8 +17,8 @@ import { getParameter } from './lib/util.js'
 export default {
 	created() {
 		store.setCourseId(this.$route.params.courseId);
-		store.setUser(getParameter('uid'));
-		console.log(`userid: ${store.getUser()}`);
+		store.setUser(getParameter('user_id'));
+		store.setClassId(getParameter('class_id'));
 	},
 
 	components: {

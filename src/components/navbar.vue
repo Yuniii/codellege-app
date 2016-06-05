@@ -35,29 +35,31 @@
 </template>
 
 <script>
+/* global UIkit */
 import store from './../lib/store'
 import Stdin from './stdin.vue'
 import { checkAnswer } from './../lib/util.js'
 
 const COMPILE_SERVER = 'http://140.125.90.231:8889/compile';
+const SUBMIT_SERVER = 'http://140.125.90.231:8888/submit'
 
 export default {
 	data() {
 		return {
 			lang: [
-				"Python",
-				"Ruby",
-				"Clojure",
-				"PHP",
-				"JavaScript",
-				"Scala",
-				"Go",
-				"C/C++",
-				"Java",
-				"VB.NET",
-				"C#",
-				"Bash",
-				"Objective-C"
+				'Python',
+				'Ruby',
+				'Clojure',
+				'PHP',
+				'JavaScript',
+				'Scala',
+				'Go',
+				'C/C++',
+				'Java',
+				'VB.NET',
+				'C#',
+				'Bash',
+				'Objective-C'
 			],
 			currentLang: 8
 		}
@@ -73,29 +75,51 @@ export default {
 				return;
 			}
 			var codeData = {
-				code:  userCode,
+				code: userCode,
 				stdin: stdin,
 				language: lang
 			};
 
-			this.$http.post(COMPILE_SERVER, codeData, (data, status, req) => {
-				var result = checkAnswer(data.output, store.getQuizData(qn).stdout);
-				store.addLog(store.getQuizData(qn).title, userCode, stdin, data.output + data.errors, result);
+			this.$http.post(COMPILE_SERVER, codeData).then((response) => {
+				var result = checkAnswer(response.data.output, store.getQuizData(qn).stdout),
+					loggedIn = store.isLoggedIn();
+				store.addLog(store.getQuizData(qn).title, userCode, stdin, response.data.output + response.data.errors, result);
 				
-				if (result && store.getUser !== 0) {
-					this.submit();
+				if (!loggedIn) {
+					console.log()
+					UIkit.notify('警告：未正確登入，練習結果將不會儲存。', {status: 'warning'});
+				}
+
+				if (result && loggedIn) {
+					this.submit(userCode);
 				}
 
 				this.$route.router.go('/' + this.$route.params.courseId + '/' + qn + '/logs');
 			});
 		},
 
-		submit() {
-			console.log('submit');
+		submit(code) {
+			var classId = store.getClassId(),
+				courseId = this.$route.params.courseId.split('-')[0],
+				lessonId = this.$route.params.courseId.split('-')[1],
+				qn = this.$route.params.qn;
+
+			var submitData = {
+				code,
+				uid: store.getUser()
+			};
+
+			this.$http.post(`${SUBMIT_SERVER}/${classId}/${courseId}/${lessonId}/${qn}`, submitData).then((data, status, req) => {
+				if (data === 'ok') {
+					UIkit.notify('練習結果已成功儲存！', {status: 'success'});
+				} else {
+					UIkit.notify('練習結果儲存失敗！', {status: 'danger'});
+				}
+			});
 		},
 
 		reset() {
-			UIkit.modal.confirm("確定要將此題清除重寫？", () => {
+			UIkit.modal.confirm('確定要將此題清除重寫？', () => {
 				store.resetCode(this.$route.params.qn);
 			});
 		},

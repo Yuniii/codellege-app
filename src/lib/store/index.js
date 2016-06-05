@@ -5,10 +5,10 @@ Vue.use(Resource);
 import { getNow } from './../util.js'
 
 const store = {};
-//const api = 'http://localhost:8888/course';
 const api = 'http://140.125.90.231:8888/course';
 export default store;
 
+store.classId = 0;
 store.courseId = 0;
 store.lessonId = 0;
 store.qn = 0;
@@ -19,6 +19,14 @@ store.onResetCodeListener = null;
 store.userCode = [];
 store.stdin = [];
 
+store.setClassId = function (classId) {
+	if (classId !== '') this.classId = classId;
+}
+
+store.getClassId = function () {
+	return this.classId;
+}
+
 store.setCourseId = function (courseId) {
 	if (courseId === this.courseId) {
 		return;
@@ -28,11 +36,15 @@ store.setCourseId = function (courseId) {
 }
 
 store.setUser = function (uid) {
-	this.uid = uid;
+	if (uid !== '') this.uid = uid;
 }
 
 store.getUser = function () {
 	return this.uid;
+}
+
+store.isLoggedIn = function () {
+	return (this.getClassId() !== 0 && this.getUser() !== 0);
 }
 
 store.loadQuizData = function (courseId) {

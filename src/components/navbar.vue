@@ -197,6 +197,7 @@ export default {
 			
 	.language-dropdown
 		box-shadow 0 2px 2px 0 rgba(0,0,0,.16),0 3px 1px -2px rgba(0,0,0,.2),0 2px 6px 0 rgba(0,0,0,.12),0 0 3px rgba(0,0,0,.4)
+		padding 5px 15px
 		a
 			color #444
 			line-height 20px

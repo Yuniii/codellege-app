@@ -42,22 +42,20 @@ export default {
 		width quiz-sider-width-medium
 	@media screen and (max-width: 1100px)
 		width quiz-sider-width-small
-	> div
-		flex 1
-		justify-content center
 	.description-container
 		overflow-y auto
 		border-bottom light-border
 		padding 8px 0 0 16px
+		height 60%
 	.description pre
 		background none
 	.stdout-container
 		flex-direction column
+		flex 1
 	.stdout
 		overflow auto
 		flex 1
 		margin-top 0
 		font-size 14px
-
 
 </style>

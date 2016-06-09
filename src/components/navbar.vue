@@ -89,29 +89,37 @@ export default {
 				if (!loggedIn) {
 					console.log()
 					UIkit.notify('警告：未正確登入，練習結果將不會儲存。', {status: 'warning'});
-				}
-
-				if (result && loggedIn) {
-					this.submit(userCode);
+				} else {
+					this.submit(userCode, result);
 				}
 
 				this.$route.router.go('/' + this.$route.params.courseId + '/' + qn + '/logs');
 			});
 		},
 
-		submit(code) {
+		submit(code, result) {
 			var classId = store.getClassId(),
 				courseId = this.$route.params.courseId.split('-')[0],
 				lessonId = this.$route.params.courseId.split('-')[1],
-				qn = this.$route.params.qn;
+				qn = this.$route.params.qn,
+				qid = store.getQuizData(qn).qid;
+
+			var type;
+
+			if (result) {
+				type = 'test_ok';
+			} else {
+				type = 'test_error';
+			}
 
 			var submitData = {
 				code,
-				uid: store.getUser()
+				uid: store.getUser(),
+				type
 			};
 
 			try {
-				this.$http.post(`${SUBMIT_SERVER}/${classId}/${courseId}/${lessonId}/${qn}`, submitData).then((response) => {
+				this.$http.post(`${SUBMIT_SERVER}/${classId}/${courseId}/${lessonId}/${qid}`, submitData).then((response) => {
 					if (response.data === 'ok') {
 						UIkit.notify('練習結果已成功儲存！', {status: 'success'});
 					} else {

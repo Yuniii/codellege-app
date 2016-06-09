@@ -11,7 +11,11 @@ export function getNow() {
 }
 
 export function checkAnswer(user, std) {
-	if (user === std || user.trim() === std.trim()) return true;
+	std = std.replace(/\r\n/g, '\n').replace(/\n\r/g, '\n');
+	var std2 = std.replace(/(: ?|： ?)\n.+\n/g, "$1\n");
+	console.log(std2);
+	console.log(user);
+	if (user === std2 || user.trim() === std2.trim()) return true;
 	return false;
 }
 

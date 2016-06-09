@@ -19,6 +19,7 @@ export default {
 		store.setCourseId(this.$route.params.courseId);
 		store.setUser(getParameter('user_id'));
 		store.setClassId(getParameter('class_id'));
+		if (store.getUser() === 0 || store.getClassId() === 0 || store.getClassId().toString().charAt(4) === '5') window.location='./403.html';
 	},
 
 	components: {

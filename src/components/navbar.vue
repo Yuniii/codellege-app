@@ -48,11 +48,11 @@ export default {
 	data() {
 		return {
 			lang: [
-				'Python',
+				'Python', // 0
 				'Ruby',
 				'Clojure',
 				'PHP',
-				'JavaScript',
+				'JavaScript', // 4
 				'Scala',
 				'Go',
 				'C/C++',
@@ -69,32 +69,66 @@ export default {
 		runCode() {
 			var qn = this.$route.params.qn,
 				userCode = store.getUserCode(qn),
-				stdin = store.getStdin(qn),
-				lang = this.currentLang;
+				stdin = store.getStdin(qn);
 
-			if (typeof userCode === 'undefined') {
-				return;
-			}
+			if (typeof userCode === 'undefined') return;
+
 			var codeData = {
 				code: userCode,
 				stdin: stdin,
-				language: lang
+				language: this.currentLang
 			};
 
-			this.$http.post(COMPILE_SERVER, codeData).then((response) => {
-				var result = checkAnswer(response.data.output, store.getQuizData(qn).stdout),
-					loggedIn = store.isLoggedIn();
-				store.addLog(store.getQuizData(qn).title, userCode, stdin, response.data.output + response.data.errors, result);
-				
-				if (!loggedIn) {
-					console.log()
-					UIkit.notify('警告：未正確登入，練習結果將不會儲存。', {status: 'warning'});
-				} else {
-					this.submit(userCode, result);
-				}
+			// JavaScript
+			if (this.currentLang === 4) {
+				let stdout = this.runJavaScript(codeData.code);
+				let data = {
+					output: stdout,
+					userCode: userCode,
+					stdin: stdin,
+					errors: ''
+				};
+				this.finish(data);
+				return;
+			}
 
-				this.$route.router.go('/' + this.$route.params.courseId + '/' + qn + '/logs');
+			this.$http.post(COMPILE_SERVER, codeData).then((response) => {
+				var data = response.data;
+				data.userCode = userCode;
+				data.stdin = stdin;
+				this.finish(data);
 			});
+		},
+
+		runJavaScript(code) {
+			let buffer = [];
+			let stdout = '';
+			console.log = function () {
+				buffer.push(arguments);
+			}
+			{ 
+				eval(code);
+				buffer.forEach((e) => {
+					Array.prototype.slice.call(e).forEach((str) => (stdout += (str.toString() + '\n')));
+				});
+			}
+			return stdout;
+		},
+
+		finish(data) {
+			var quizData = store.getQuizData(this.$route.params.qn);
+			var result = checkAnswer(data.output, quizData.stdout),
+				loggedIn = store.isLoggedIn();
+
+			store.addLog(quizData.title, data.userCode, data.stdin, data.output + data.errors, result);
+			
+			if (!loggedIn) {
+				UIkit.notify('警告：未正確登入，練習結果將不會儲存。', {status: 'warning'});
+			} else {
+				this.submit(data.userCode, result);
+			}
+
+			this.$route.router.go('/' + this.$route.params.courseId + '/' + this.$route.params.qn + '/logs');
 		},
 
 		submit(code, result) {

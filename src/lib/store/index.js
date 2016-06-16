@@ -84,7 +84,7 @@ store.updateQ = function (qn, cb) {
 		return;
 	}
 	this.qn = parseInt(qn);
-	var data = this.quizData[parseInt(qn)-1];
+	var data = this.quizData[parseInt(qn) - 1];
 	cb(data);
 	for (var i = 0; i < this.onUpdateQListener.length; i++) {
 		this.onUpdateQListener[i](data);

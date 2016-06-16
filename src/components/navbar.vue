@@ -11,11 +11,11 @@
 					<stdin></stdin>
 				</li>
 				<li class="uk-parent" data-uk-dropdown="{mode:'click'}">
-					<a href="javascript:void(0)">{{ lang[currentLang] }} <i class="uk-icon-caret-down"></i></a>
+					<a href="javascript:void(0)">{{ currentLangObj.name }} <i class="uk-icon-caret-down"></i></a>
 					<div class="uk-dropdown uk-dropdown-navbar language-dropdown">
 						<ul class="uk-nav uk-nav-navbar">
 							<li v-for="l in lang">
-								<a href="javascript:void(0)" @click="setLang($index)">{{ l }}</a>
+								<a href="javascript:void(0)" @click="setLang(l.id)">{{ l.name }}</a>
 							</li>
 						</ul>
 					</div>
@@ -35,12 +35,12 @@
 </template>
 
 <script>
-/* global UIkit */
+/* global UIkit, BiwaScheme */
 import store from './../lib/store'
 import Stdin from './stdin.vue'
 import { checkAnswer } from './../lib/util.js'
 
-const COMPILE_SERVER = 'http://140.125.90.231:8889/compile';
+const COMPILE_SERVER = 'http://140.125.90.231:3000/compile';
 const SUBMIT_SERVER = 'http://140.125.90.231:8888/submit'
 //const SUBMIT_SERVER = 'http://localhost:8888/submit'
 
@@ -48,56 +48,93 @@ export default {
 	data() {
 		return {
 			lang: [
-				'Python', // 0
-				'Ruby',
-				'Clojure',
-				'PHP',
-				'JavaScript', // 4
-				'Scala',
-				'Go',
-				'C/C++',
-				'Java',
-				'VB.NET',
-				'C#',
-				'Bash',
-				'Objective-C'
+				{id: 8, name: 'Java'},
+				{id: 4, name: 'JavaScript'},
+				{id: 13, name: 'Scheme'},
+				{id: 0, name: 'Python'}
+				//'Python', // 0
+				//'Ruby',
+				//'Clojure',
+				//'PHP',
+				//'JavaScript', // 4
+				//'Scala',
+				//'Go',
+				//'C/C++',
+				//'Java',
+				//'VB.NET',
+				//'C#',
+				//'Bash',
+				//'Objective-C'
 			],
 			currentLang: 8
 		}
 	},
+
+	computed: {
+		currentLangObj() {
+			var o;
+			this.lang.forEach((obj) => {
+				if (obj.id === this.currentLang) o = obj;
+			});
+			return o;
+		}
+
+	},
+
 	methods: {
 		runCode() {
 			var qn = this.$route.params.qn,
 				userCode = store.getUserCode(qn),
-				stdin = store.getStdin(qn);
+				stdin = store.getStdin(qn),
+				title = store.getQuizData(qn).title,  // tile is file name of code
+				lang = this.currentLang;
 
 			if (typeof userCode === 'undefined') return;
 
 			var codeData = {
 				code: userCode,
 				stdin: stdin,
-				language: this.currentLang
+				language: lang,
+				fileName: title
 			};
+
+			let data = {
+				output: '',
+				userCode: userCode,
+				stdin: stdin,
+				errors: ''
+			};
+
+			// Python
+			if (this.currentLang === 0) {
+				data.output = this.runPython(codeData.code);
+				this.finish(data);
+				return;
+			}
 
 			// JavaScript
 			if (this.currentLang === 4) {
-				let stdout = this.runJavaScript(codeData.code);
-				let data = {
-					output: stdout,
-					userCode: userCode,
-					stdin: stdin,
-					errors: ''
-				};
+				data.output = this.runJavaScript(codeData.code);
+				this.finish(data);
+				return;
+			}
+
+			// Scheme
+			if (this.currentLang === 13) {
+				data.output = this.runScheme(codeData.code);
 				this.finish(data);
 				return;
 			}
 
 			this.$http.post(COMPILE_SERVER, codeData).then((response) => {
-				var data = response.data;
-				data.userCode = userCode;
-				data.stdin = stdin;
+				data.output = response.data.output;
+				data.errors = response.data.errors;
 				this.finish(data);
 			});
+		},
+
+		runPython(code) {
+
 		},
 
 		runJavaScript(code) {
@@ -112,6 +149,23 @@ export default {
 					Array.prototype.slice.call(e).forEach((str) => (stdout += (str.toString() + '\n')));
 				});
 			}
+			return stdout;
+		},
+
+		runScheme(code) {
+			var scheme = new BiwaScheme.Interpreter((e) => console.log(e.message));
+			var stdout = '';
+			// global puts methods, for BiwaScheme
+			puts = function (str) {
+				if (str !== '' && typeof str !== 'undefined') {
+					stdout += (str + '\n');
+				}
+			};
+			scheme.evaluate(code, (result) => {
+				if (result !== undefined && result !== BiwaScheme.undef) {
+					stdout += BiwaScheme.to_write(result);
+				}
+			});
 			return stdout;
 		},
 

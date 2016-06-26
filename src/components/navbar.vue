@@ -35,7 +35,7 @@
 </template>
 
 <script>
-/* global UIkit, BiwaScheme */
+/* global UIkit, BiwaScheme, puts */
 import store from './../lib/store'
 import Stdin from './stdin.vue'
 import { checkAnswer } from './../lib/util.js'
@@ -107,8 +107,7 @@ export default {
 
 			// Python
 			if (this.currentLang === 0) {
-				data.output = this.runPython(codeData.code);
-				this.finish(data);
+				this.runPython(codeData.code, data);
 				return;
 			}
 
@@ -133,7 +132,7 @@ export default {
 			});
 		},
 
-		runPython(code) {
+		runPython(code, data) {
 
 		},
 
@@ -143,29 +142,36 @@ export default {
 			console.log = function () {
 				buffer.push(arguments);
 			}
-			{ 
-				eval(code);
-				buffer.forEach((e) => {
-					Array.prototype.slice.call(e).forEach((str) => (stdout += (str.toString() + '\n')));
-				});
+
+			{
+				try {
+					eval(code);
+					buffer.forEach((e) => {
+						Array.prototype.slice.call(e).forEach((str) => (stdout += (str.toString() + '\n')));
+					});
+				} catch (err) {
+					stdout = err.message;
+				}
 			}
 			return stdout;
 		},
 
 		runScheme(code) {
-			var scheme = new BiwaScheme.Interpreter((e) => console.log(e.message));
 			var stdout = '';
+			var scheme = new BiwaScheme.Interpreter((e) => { stdout = e.message });
 			// global puts methods, for BiwaScheme
 			puts = function (str) {
 				if (str !== '' && typeof str !== 'undefined') {
 					stdout += (str + '\n');
 				}
 			};
+
 			scheme.evaluate(code, (result) => {
 				if (result !== undefined && result !== BiwaScheme.undef) {
 					stdout += BiwaScheme.to_write(result);
 				}
 			});
+
 			return stdout;
 		},
 

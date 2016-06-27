@@ -50,8 +50,8 @@ export default {
 			lang: [
 				{id: 8, name: 'Java'},
 				{id: 4, name: 'JavaScript'},
-				{id: 13, name: 'Scheme'},
-				{id: 0, name: 'Python'}
+				{id: 13, name: 'Scheme'}
+				//{id: 0, name: 'Python'}
 				//'Python', // 0
 				//'Ruby',
 				//'Clojure',

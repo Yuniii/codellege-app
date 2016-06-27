@@ -159,12 +159,6 @@ export default {
 		runScheme(code) {
 			var stdout = '';
 			var scheme = new BiwaScheme.Interpreter((e) => { stdout = e.message });
-			// global puts methods, for BiwaScheme
-			puts = function (str) {
-				if (str !== '' && typeof str !== 'undefined') {
-					stdout += (str + '\n');
-				}
-			};
 
 			scheme.evaluate(code, (result) => {
 				if (result !== undefined && result !== BiwaScheme.undef) {

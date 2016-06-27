@@ -1,6 +1,6 @@
 <template>
 	<div class="logs-container">
-		<h1 id="my-ida">編譯記錄</h1>
+		<h1 id="my-ida">執行記錄</h1>
 		<div v-for="log in logs | orderBy 'time' -1" class="uk-panel uk-panel-box log">
 			<dl class="uk-description-list-horizontal">
 				<div class="uk-panel-badge"><a href="javascript:void(0)" class="uk-close uk-close-alt delete" @click="deleteLog(log)"></a></div>
@@ -10,11 +10,11 @@
 				<dd>{{ log.time }}</dd>
 				<dt class="code-title">程式碼</dt>
 				<dd><a href="javascript:void(0)" @click="showCode($index, $event)">點擊展開程式碼</a><pre class="code-content" id="code-content-{{ $index }}">{{ log.code }}</pre></dd>
-				<dt>Input 資料</dt>
+				<dt>Input</dt>
 				<dd>{{ log.stdin | checkEmpty }}</dd>
-				<dt>編譯訊息</dt>
+				<dt>Output</dt>
 				<dd><pre>{{ log.data }}</pre></dd>
-				<dt>測驗結果</dt>
+				<dt>測試結果</dt>
 				<dd><pre>{{{ log.passed | passed }}}</pre></dd>
 			</dl>
 		</div>

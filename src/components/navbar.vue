@@ -4,7 +4,7 @@
 			<ul class="uk-navbar-nav">
 				<li class="run-btn"><a href="javascript:void(0)" @click="runCode">執行 <i class="uk-icon-play"></i></a></li>
 				<li><a v-link="{ path: '/' + $route.params.courseId + '/' + $route.params.qn, exact: true}">程式撰寫</a></li>
-				<li><a v-link="{ path: '/' + $route.params.courseId + '/' + $route.params.qn + '/logs' }">編譯記錄</a></li>
+				<li><a v-link="{ path: '/' + $route.params.courseId + '/' + $route.params.qn + '/logs' }">執行記錄</a></li>
 				<li><a href="javascript:void(0)" @click="reset">重設此題</a></li>
 				<li class="uk-parent" data-uk-dropdown="{mode:'click'}">
 					<a href="javascript:void(0)">Input <i class="uk-icon-caret-down"></i></a>
@@ -50,8 +50,8 @@ export default {
 			lang: [
 				{id: 8, name: 'Java'},
 				{id: 4, name: 'JavaScript'},
-				{id: 13, name: 'Scheme'},
-				{id: 0, name: 'Python'}
+				{id: 13, name: 'Scheme'}
+				//{id: 0, name: 'Python'}
 				//'Python', // 0
 				//'Ruby',
 				//'Clojure',

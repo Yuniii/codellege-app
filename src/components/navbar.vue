@@ -162,7 +162,9 @@ export default {
 
 			scheme.evaluate(code, (result) => {
 				if (result !== undefined && result !== BiwaScheme.undef) {
-					stdout += BiwaScheme.to_write(result);
+					for (var i in result) {
+						stdout = stdout + result[i] + '\n';
+                                    	}
 				}
 			});
 

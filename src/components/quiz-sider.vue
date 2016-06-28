@@ -23,7 +23,12 @@ export default {
 	created() {
 		store.onUpdateQ((data) => {
 			this.description = data.description;
-			this.stdout = data.stdout;
+			
+			if (data.stdout.includes('>>>')) {
+				this.stdout = ''
+			} else {
+				this.stdout = data.stdout;
+			}
 		});
 	}
 }

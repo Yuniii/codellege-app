@@ -76,5 +76,4 @@ export default {
 	height full-height
 	pre
 		font-family Roboto Mono, monospace
-
 </style>
